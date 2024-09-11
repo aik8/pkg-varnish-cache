@@ -1,0 +1,19 @@
+varnish@VRNVARIANT@: embedded-library usr/bin/varnishtest@VRNVARIANT@: zlib
+varnish@VRNVARIANT@: embedded-library usr/sbin/varnishd@VRNVARIANT@: zlib
+
+
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/sbin/varnishd@VRNVARIANT@
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/bin/varnishadm@VRNVARIANT@
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/bin/varnishhist@VRNVARIANT@
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/bin/varnishlog@VRNVARIANT@
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/bin/varnishncsa@VRNVARIANT@
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/bin/varnishstat@VRNVARIANT@
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/bin/varnishtest@VRNVARIANT@
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/bin/varnishtop@VRNVARIANT@
+
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/lib/libvarnishapi.so.*
+varnish@VRNVARIANT@: unstripped-binary-or-object usr/lib/varnish/vmods/libvmod_*.so
+
+varnish@VRNVARIANT@: versioned-provides varnishd@VRNVARIANT@-vrt (= @VRNVARIANT@.0)
+
+varnish@VRNVARIANT@: init.d-script-not-included-in-package etc/init.d/varnish@VRNVARIANT@

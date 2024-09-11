@@ -1,27 +1,25 @@
 #!/usr/bin/make -f
 
-DH_VERBOSE=1
-
-# List of architectures where jemalloc is not available
-WITHOUT_JEMALLOC_ARCH_LIST := hppa m68k arm64
+# See debhelper(7) (uncomment to enable).
+# Output every command that modifies files on the build system.
+export DH_VERBOSE = 1
 
 # Explicitly disable LTO, which became default from Ubuntu 21.04 and onwards
 export DEB_BUILD_MAINT_OPTIONS=optimize=-lto
 
-# Explicitly initialize a variable to select architecture, unless it has been
-# defined before.  This is compared against the WITHOUT_*_LIST variables later
-# in this makefile
-DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+# See FEATURE AREAS in dpkg-buildflags(1).
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
-# Set local state dir for FHS
-LOCAL_CONFIGURE_FLAGS  = --localstatedir=/var/lib --libdir=/usr/lib
+# See ENVIRONMENT in dpkg-buildflags(1).
+# Package maintainers to append CFLAGS.
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# Package maintainers to append LDFLAGS.
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 
-ifneq ($(filter $(DEB_HOST_ARCH),$(WITHOUT_JEMALLOC_ARCH_LIST)),)
-LOCAL_CONFIGURE_FLAGS += --without-jemalloc
-endif
-
-# Ship contrib scripts
-LOCAL_CONFIGURE_FLAGS += --with-contrib
+export LOCAL_CONFIGURE_FLAGS = --prefix=/usr/share/varnish@VRNVARIANT@
+LOCAL_CONFIGURE_FLAGS += --program-suffix=@VRNVARIANT@
+LOCAL_CONFIGURE_FLAGS += --exec-prefix=/usr
+LOCAL_CONFIGURE_FLAGS += --localstatedir=/usr/share/varnish@VRNVARIANT@/var
 
 num=\#
 VARNISHD_ABI = $(shell \
@@ -41,19 +39,19 @@ VARNISHD_VRT = $(shell \
 %:
 	dh $@ --parallel
 
-ifeq (,$(filter test,$(LOCAL_BUILD_OPTIONS)))
-# Disable automated build tests
 override_dh_auto_test:
-endif
 
-# Override to add local configure flags
+# dh_make generated override targets.
+# This is an example for Cmake (see <https://bugs.debian.org/641051>).
 override_dh_auto_configure:
-	dh_auto_configure -- $(LOCAL_CONFIGURE_FLAGS)
+	dh_auto_configure -- \
+	$(LOCAL_CONFIGURE_FLAGS)
+#	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
 
 override_dh_auto_install:
 	dh_auto_install -a
-	install -d debian/tmp/etc/varnish
-	install -T -m 0644 etc/example.vcl debian/tmp/etc/varnish/default.vcl
+	install -d debian/varnish@VRNVARIANT@/etc/varnish@VRNVARIANT@
+	install -T -m 0644 etc/example.vcl debian/varnish@VRNVARIANT@/etc/varnish@VRNVARIANT@/default.vcl
 	@ # Remove .la files
 	@ # (See http://wiki.debian.org/ReleaseGoals/LAFileRemoval)
 	find $(CURDIR)/debian/ -name \*.la -delete
@@ -61,35 +59,21 @@ override_dh_auto_install:
 	find $(CURDIR)/debian -name \*.a -delete
 
 override_dh_install-arch:
-	dh_install -a --fail-missing
-	@ # Override to add the "varnishreload" script
+	dh_install -a
+	dh_missing --fail-missing
+	@ # Override to add the "varnishreload@VRNVARIANT@" script
 	install -o root -g root -m 755 \
-		$(CURDIR)/debian/varnishreload \
-		$(CURDIR)/debian/varnish/usr/sbin/varnishreload
+		$(CURDIR)/debian/varnishreload@VRNVARIANT@ \
+		$(CURDIR)/debian/varnish@VRNVARIANT@/usr/sbin/varnishreload@VRNVARIANT@
 
 override_dh_installdocs:
 # In 4.0 the built docs need to be copied to the current/4.1 location.
-	test -d doc/html || cp -pr doc/sphinx/build/html doc/html
+#	test -d doc/html || cp -pr doc/sphinx/build/html doc/html
 	dh_installdocs
 
-
-override_dh_gencontrol:
-	echo "varnishd:ABI=varnishd-abi-$(VARNISHD_ABI)" >> debian/substvars
-	echo "varnishd:VRT=varnishd-vrt (= $(VARNISHD_VRT))" >> debian/substvars
-
-	if [ -n "$$DEBIAN_OVERRIDE_BINARY_VERSION" ]; then \
- 		dh_gencontrol -- -Tdebian/substvars -v$$DEBIAN_OVERRIDE_BINARY_VERSION; \
-	else \
-		dh_gencontrol -- -Tdebian/substvars; \
-	fi
-
-
 override_dh_installsystemd:
-	dh_installsystemd
-	dh_installsystemd --name varnishncsa --no-enable --no-start
-
-override_dh_compress:
-	dh_compress -X/usr/share/doc/varnish-doc/html
+	dh_installsystemd --name varnish@VRNVARIANT@ --no-enable --no-start
+	dh_installsystemd --name varnishncsa@VRNVARIANT@ --no-enable --no-start
 
 override_dh_strip:
 	dh_strip --keep-debug -Xvarnish -Xlibvmod
