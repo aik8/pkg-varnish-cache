@@ -32,8 +32,8 @@ ENV DEBEMAIL=email@example.com
 ENV REL=noble
 ENV ARCH=amd64
 
-ENV VERSION=6
-ENV CUSTOM_VER=2
+ARG VERSION=
+ARG CUSTOM_VER=
 
 # Get our pkg build script.
 RUN git clone https://github.com/aik8/pkg-varnish-cache.git /varnish
