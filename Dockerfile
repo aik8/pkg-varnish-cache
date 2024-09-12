@@ -1,5 +1,5 @@
 # Determine which base image to grab.
-ARG BASE_IMG=
+ARG BASE_IMG=ubuntu:lts
 
 FROM ${BASE_IMG}
 
@@ -9,9 +9,6 @@ ENV DEBFULLNAME=Jiannis
 ENV DEBEMAIL=email@example.com
 ENV REL=noble
 ENV ARCH=amd64
-
-ARG VERSION=
-ARG CUSTOM_VER=
 
 # Install dependencies
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -37,6 +34,11 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     python3-pytest \
     rename \
     wget
+
+# Get version and custom version later, as the previous steps will always be
+# the same and we can benefit from Docker's caching.
+ARG VERSION=
+ARG CUSTOM_VER=
 
 # Get our pkg build script.
 RUN git clone https://github.com/aik8/pkg-varnish-cache.git /varnish
