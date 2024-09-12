@@ -7,10 +7,10 @@ set -e
 set -u
 
 # Settings
-daemon_group="varnish@VRNVARIANT@"
-daemon_user="varnish@VRNVARIANT@"
-worker_user="vcache@VRNVARIANT@"
-log_user="varnishlog@VRNVARIANT@"
+daemon_group="varnish"
+daemon_user="varnish"
+worker_user="vcache"
+log_user="varnishlog"
 daemon_dir=/var/lib/varnish@VRNVARIANT@/$(uname -n)s
 log_dir="/var/log/varnish@VRNVARIANT@"
 

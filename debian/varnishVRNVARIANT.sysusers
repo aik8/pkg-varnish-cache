@@ -1,4 +1,4 @@
-u varnishlog@VRNVARIANT@ -:varnish@VRNVARIANT@ "Varnish v@VRNVARIANT@ Cache Proxy"
-u vcache@VRNVARIANT@ -:varnish@VRNVARIANT@ "Varnish v@VRNVARIANT@ Cache Proxy"
-u varnish@VRNVARIANT@ -:varnish@VRNVARIANT@ "Varnish v@VRNVARIANT@ Cache Proxy"
-g varnish@VRNVARIANT@ -
+u varnishlog -:varnish "Varnish Cache Proxy"
+u vcache -:varnish "Varnish Cache Proxy"
+u varnish -:varnish "Varnish Cache Proxy"
+g varnish -

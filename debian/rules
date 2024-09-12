@@ -39,7 +39,7 @@ VARNISHD_VRT = $(shell \
 %:
 	dh $@ --parallel
 
-override_dh_auto_test:
+#override_dh_auto_test:
 
 # dh_make generated override targets.
 # This is an example for Cmake (see <https://bugs.debian.org/641051>).
