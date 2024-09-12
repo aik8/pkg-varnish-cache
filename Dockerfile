@@ -1,4 +1,17 @@
-FROM ubuntu:noble
+# Determine which base image to grab.
+ARG BASE_IMG=
+
+FROM ${BASE_IMG}
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBFULLNAME=Jiannis
+ENV DEBEMAIL=email@example.com
+ENV REL=noble
+ENV ARCH=amd64
+
+ARG VERSION=
+ARG CUSTOM_VER=
 
 # Install dependencies
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -24,16 +37,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     python3-pytest \
     rename \
     wget
-
-# Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
-ENV DEBFULLNAME=Jiannis
-ENV DEBEMAIL=email@example.com
-ENV REL=noble
-ENV ARCH=amd64
-
-ARG VERSION=
-ARG CUSTOM_VER=
 
 # Get our pkg build script.
 RUN git clone https://github.com/aik8/pkg-varnish-cache.git /varnish
