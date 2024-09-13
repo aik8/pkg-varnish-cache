@@ -40,14 +40,15 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 ARG VERSION=
 ARG CUSTOM_VER=
 
-# Get our pkg build script.
-RUN git clone https://github.com/aik8/pkg-varnish-cache.git /varnish
+# Copy over the necessary assets.
+COPY debian /varnish/debian/
+COPY build-pkg.sh /varnish/
+COPY dl-source.sh /varnish/
+COPY export.sh /
 
 # Switch to the directory and run the build script.
 WORKDIR /varnish
 RUN ./build-pkg.sh $VERSION $CUSTOM_VER
 
-# Take the 
-VOLUME output
-COPY export.sh /
+# Take the built package and put it in the output volume.
 ENTRYPOINT ["/bin/bash", "/export.sh"]
