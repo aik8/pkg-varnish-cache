@@ -5,8 +5,8 @@ After=varnish@VRNVARIANT@.service
 [Service]
 RuntimeDirectory=varnishncsa@VRNVARIANT@
 Type=forking
-User=varnishlog@VRNVARIANT@
-Group=varnish@VRNVARIANT@
+User=varnishlog
+Group=varnish
 
 # Beware of custom formats! If you wish to use a different format using the
 # -F option for varnishncsa, please note that systemd also uses percent '%'
