@@ -5,8 +5,8 @@ pipeline {
 	stages {
 		stage('Update') {
 			steps {
-				sh 'apt update'
-				sh 'apt full-upgrade -y'
+				sh 'sudo apt-get update'
+				sh 'sudo apt-get full-upgrade -y'
 			}
 		}
 	}
