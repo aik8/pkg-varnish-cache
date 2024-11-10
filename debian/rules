@@ -19,7 +19,7 @@ export DEB_BUILD_MAINT_OPTIONS=optimize=-lto
 export LOCAL_CONFIGURE_FLAGS = --prefix=/usr/share/varnish@VRNVARIANT@
 LOCAL_CONFIGURE_FLAGS += --program-suffix=@VRNVARIANT@
 LOCAL_CONFIGURE_FLAGS += --exec-prefix=/usr
-LOCAL_CONFIGURE_FLAGS += --localstatedir=/usr/share/varnish@VRNVARIANT@/var
+LOCAL_CONFIGURE_FLAGS += --localstatedir=/var/lib/varnish@VRNVARIANT@
 
 num=\#
 VARNISHD_ABI = $(shell \
